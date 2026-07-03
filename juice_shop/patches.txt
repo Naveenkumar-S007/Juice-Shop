@@ -1,0 +1,2 @@
+# patches to run when app is updated
+# see: https://docs.frappe.io/framework/user/en/database-migrations

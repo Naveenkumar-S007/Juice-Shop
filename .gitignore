@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.frappe
+node_modules/
+*.egg-info/
+.DS_Store
+.vscode/
+.idea/
+*.log
+dist/
+build/
+.env
