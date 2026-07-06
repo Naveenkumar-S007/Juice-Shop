@@ -15,6 +15,9 @@ doc_events = {
 	},
 	"Waste Entry": {
 		"on_submit": "juice_shop.juice_shop.doctype.waste_entry.waste_entry.on_waste_entry_submit",
+	},
+	"Item": {
+		"on_update": "juice_shop.juice_shop.sales_invoice_hooks.on_item_update",
 	}
 }
 
@@ -39,7 +42,22 @@ custom_fields = {
 			"options": "Juice Recipe",
 			"read_only": 1,
 			"insert_after": "juice_recipe_section",
-			"description": "Auto-populated when a Juice Recipe links this Item. Click to open the recipe.",
+			"description": "Auto-populated when ingredients are added below. Click to open the recipe.",
+		},
+		{
+			"fieldname": "recipe_ingredients_section",
+			"fieldtype": "Section Break",
+			"label": "Recipe Ingredients",
+			"insert_after": "custom_juice_recipe",
+			"collapsible": 0,
+		},
+		{
+			"fieldname": "recipe_ingredients",
+			"fieldtype": "Table",
+			"label": "Ingredients",
+			"options": "Juice Recipe Item",
+			"insert_after": "recipe_ingredients_section",
+			"description": "Add raw materials and quantities needed to make one serving of this item. A Juice Recipe will be auto-created on save.",
 		},
 	]
 }

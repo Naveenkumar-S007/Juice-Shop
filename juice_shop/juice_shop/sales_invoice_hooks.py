@@ -139,8 +139,49 @@ def restore_stock_for_cancellation(doc):
 					"reference_doctype": "Sales Invoice",
 					"reference_name": doc.name,
 					"posting_datetime": now_datetime(),
-					"remarks": _("Reversed due to cancellation of Invoice {0}").format(
-						doc.name
-					),
-				}
-			).insert(ignore_permissions=True)
+				"remarks": _("Reversed due to cancellation of Invoice {0}").format(
+					doc.name
+				),
+			}
+		).insert(ignore_permissions=True)
+
+
+def on_item_update(doc, method=None):
+	"""Called via hooks.py doc_event on Item on_update.
+	If the Item has ingredients in its recipe_ingredients table,
+	auto-create or update the corresponding Juice Recipe.
+	"""
+	ingredients = doc.get("recipe_ingredients") or []
+
+	if not ingredients:
+		# No ingredients on this Item — leave any existing Juice Recipe alone
+		return
+
+	# Find existing Juice Recipe for this item (including disabled ones)
+	recipe_name = frappe.db.get_value(
+		"Juice Recipe", {"item": doc.name}, "name"
+	)
+
+	if recipe_name:
+		recipe = frappe.get_doc("Juice Recipe", recipe_name)
+		# Re-enable if it was disabled
+		recipe.disabled = 0
+	else:
+		# Prevent duplicate naming conflict if a deleted recipe's name still lingers
+		if frappe.db.exists("Juice Recipe", {"item": doc.name}):
+			# Shouldn't happen after the check above, but safety net
+			return
+		recipe = frappe.get_doc({
+			"doctype": "Juice Recipe",
+			"item": doc.name,
+		})
+
+	# Clear existing ingredients and re-populate from Item's table
+	recipe.set("ingredients", [])
+	for ing in ingredients:
+		recipe.append("ingredients", {
+			"raw_material": ing.get("raw_material"),
+			"quantity_per_unit": ing.get("quantity_per_unit"),
+		})
+
+	recipe.save(ignore_permissions=True)
