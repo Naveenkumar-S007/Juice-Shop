@@ -1,8 +1,8 @@
 # Copyright (c) 2026, Your Company
 # License: MIT
 """
-Simple waste report: for a date range, shows wasted quantity and value per
-juice item and reason, from submitted Waste Entries.
+Daily Waste Summary: for a date range, shows wasted quantity and value
+per raw material and reason, from submitted Waste Entries.
 """
 
 import frappe
@@ -19,10 +19,10 @@ def execute(filters=None):
 
 def get_columns():
 	return [
-		{"label": _("Juice Item"), "fieldname": "juice_item", "fieldtype": "Link", "options": "Juice Item", "width": 180},
+		{"label": _("Raw Material"), "fieldname": "raw_material", "fieldtype": "Link", "options": "Raw Material", "width": 200},
 		{"label": _("Reason"), "fieldname": "reason", "fieldtype": "Link", "options": "Waste Reason", "width": 150},
 		{"label": _("Entries"), "fieldname": "entry_count", "fieldtype": "Int", "width": 90},
-		{"label": _("Qty Wasted"), "fieldname": "qty_wasted", "fieldtype": "Int", "width": 100},
+		{"label": _("Qty Wasted"), "fieldname": "qty_wasted", "fieldtype": "Float", "width": 100},
 		{"label": _("Waste Value"), "fieldname": "waste_value", "fieldtype": "Currency", "width": 130},
 	]
 
@@ -34,7 +34,7 @@ def get_data(filters):
 	return frappe.db.sql(
 		"""
 		select
-			wi.juice_item as juice_item,
+			wi.raw_material as raw_material,
 			wi.reason as reason,
 			count(distinct w.name) as entry_count,
 			sum(wi.qty) as qty_wasted,
@@ -43,7 +43,7 @@ def get_data(filters):
 		inner join `tabWaste Entry` w on w.name = wi.parent
 		where w.docstatus = 1
 			and w.waste_date between %(from_date)s and %(to_date)s
-		group by wi.juice_item, wi.reason
+		group by wi.raw_material, wi.reason
 		order by waste_value desc
 		""",
 		{"from_date": from_date, "to_date": to_date},

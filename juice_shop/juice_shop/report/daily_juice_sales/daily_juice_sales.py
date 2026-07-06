@@ -1,8 +1,9 @@
 # Copyright (c) 2026, Your Company
 # License: MIT
 """
-Simple daily sales report: for a date range, shows quantity sold and revenue
-per juice item, from submitted Juice Orders. No stock/warehouse dependency.
+Daily Sales report: for a date range, shows quantity sold and revenue
+per item, from submitted Sales Invoices. Uses standard ERPNext Sales
+Invoice Item table — no custom Juice Order doctype needed.
 """
 
 import frappe
@@ -19,9 +20,9 @@ def execute(filters=None):
 
 def get_columns():
 	return [
-		{"label": _("Juice Item"), "fieldname": "juice_item", "fieldtype": "Link", "options": "Juice Item", "width": 200},
-		{"label": _("Orders"), "fieldname": "order_count", "fieldtype": "Int", "width": 100},
-		{"label": _("Qty Sold"), "fieldname": "qty_sold", "fieldtype": "Int", "width": 100},
+		{"label": _("Item"), "fieldname": "item_code", "fieldtype": "Link", "options": "Item", "width": 200},
+		{"label": _("Invoices"), "fieldname": "invoice_count", "fieldtype": "Int", "width": 100},
+		{"label": _("Qty Sold"), "fieldname": "qty_sold", "fieldtype": "Float", "width": 100},
 		{"label": _("Revenue"), "fieldname": "revenue", "fieldtype": "Currency", "width": 130},
 	]
 
@@ -33,15 +34,15 @@ def get_data(filters):
 	return frappe.db.sql(
 		"""
 		select
-			oi.juice_item as juice_item,
-			count(distinct o.name) as order_count,
-			sum(oi.qty) as qty_sold,
-			sum(oi.amount) as revenue
-		from `tabJuice Order Item` oi
-		inner join `tabJuice Order` o on o.name = oi.parent
-		where o.docstatus = 1
-			and o.order_date between %(from_date)s and %(to_date)s
-		group by oi.juice_item
+			si.item_code as item_code,
+			count(distinct si.parent) as invoice_count,
+			sum(si.qty) as qty_sold,
+			sum(si.base_net_amount) as revenue
+		from `tabSales Invoice Item` si
+		inner join `tabSales Invoice` inv on inv.name = si.parent
+		where inv.docstatus = 1
+			and inv.posting_date between %(from_date)s and %(to_date)s
+		group by si.item_code
 		order by revenue desc
 		""",
 		{"from_date": from_date, "to_date": to_date},

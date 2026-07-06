@@ -7,15 +7,16 @@ from frappe.model.document import Document
 from frappe.utils import flt
 
 
-class JuiceItem(Document):
+class JuiceRecipe(Document):
 	def validate(self):
-		if self.is_active and not self.get("recipe_items"):
+		"""Ensure at least one ingredient and validate quantities."""
+		if not self.get("ingredients"):
 			frappe.throw(
-				_("Juice Item '{0}' is marked as Active but has no Recipe Items defined. "
-				  "Add at least one raw material to the Recipe (Ingredients) section, "
-				  "or deactivate this item.").format(self.item_name)
+				_("Please add at least one ingredient to the recipe for Item {0}.").format(
+					self.item
+				)
 			)
-		for row in self.get("recipe_items") or []:
+		for row in self.get("ingredients"):
 			if flt(row.quantity_per_unit) <= 0:
 				frappe.throw(
 					_("Row #{0}: Quantity per unit must be greater than 0 for raw material '{1}'.").format(
