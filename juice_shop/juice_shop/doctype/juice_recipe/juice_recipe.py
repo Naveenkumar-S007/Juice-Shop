@@ -27,12 +27,19 @@ class JuiceRecipe(Document):
 	def on_update(self):
 		"""Sync the Juice Recipe link back to the Item doctype so it's visible.
 		Fires on both insert and subsequent saves."""
-		self._sync_to_item()
+		try:
+			self._sync_to_item()
+		except Exception:
+			# Custom field may not exist yet — run `bench migrate` to create it
+			pass
 
 	def on_trash(self):
 		"""Clear the Juice Recipe link on the Item when recipe is deleted."""
-		if frappe.db.exists("Item", self.item):
-			frappe.db.set_value("Item", self.item, "custom_juice_recipe", None)
+		try:
+			if frappe.db.exists("Item", self.item):
+				frappe.db.set_value("Item", self.item, "custom_juice_recipe", None)
+		except Exception:
+			pass
 
 	def _sync_to_item(self):
 		"""Set custom_juice_recipe field on the linked Item."""
