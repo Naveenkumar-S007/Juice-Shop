@@ -23,3 +23,18 @@ class JuiceRecipe(Document):
 						row.idx, row.raw_material
 					)
 				)
+
+	def on_update(self):
+		"""Sync the Juice Recipe link back to the Item doctype so it's visible.
+		Fires on both insert and subsequent saves."""
+		self._sync_to_item()
+
+	def on_trash(self):
+		"""Clear the Juice Recipe link on the Item when recipe is deleted."""
+		if frappe.db.exists("Item", self.item):
+			frappe.db.set_value("Item", self.item, "custom_juice_recipe", None)
+
+	def _sync_to_item(self):
+		"""Set custom_juice_recipe field on the linked Item."""
+		if frappe.db.exists("Item", self.item):
+			frappe.db.set_value("Item", self.item, "custom_juice_recipe", self.name)
