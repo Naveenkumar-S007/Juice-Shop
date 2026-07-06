@@ -6,12 +6,12 @@
  "engine": "InnoDB",
  "field_order": [
   "raw_material",
-  "voucher_type",
-  "voucher_no",
+  "reference_doctype",
+  "reference_name",
   "column_break_1",
   "posting_datetime",
-  "qty_change",
-  "balance_qty",
+  "change_qty",
+  "balance_after",
   "remarks"
  ],
  "fields": [
@@ -25,17 +25,17 @@
    "reqd": 1
   },
   {
-   "fieldname": "voucher_type",
+   "fieldname": "reference_doctype",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Voucher Type",
+   "label": "Reference Doctype",
    "read_only": 1
   },
   {
-   "fieldname": "voucher_no",
+   "fieldname": "reference_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Voucher No",
+   "label": "Reference Name",
    "read_only": 1
   },
   {
@@ -50,18 +50,18 @@
    "read_only": 1
   },
   {
-   "description": "Negative = consumed (sale), Positive = added (purchase/restock/cancellation reversal)",
-   "fieldname": "qty_change",
+   "description": "Negative = consumed (deduction), Positive = added (restock/reversal)",
+   "fieldname": "change_qty",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Qty Change",
+   "label": "Change Qty",
    "read_only": 1
   },
   {
-   "fieldname": "balance_qty",
+   "fieldname": "balance_after",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Balance Qty After",
+   "label": "Balance After",
    "read_only": 1
   },
   {

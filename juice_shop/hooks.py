@@ -18,8 +18,9 @@ doc_events = {
 }
 
 # Fixtures (optional, export master data with the app)
+# Note: Raw Material and Juice data are shop-specific transactional records,
+# not app fixtures — they're managed in-app, not via fixtures.
 fixtures = [
 	{"doctype": "Juice Item"},
-	{"doctype": "Waste Reason"},
-	{"doctype": "Raw Material"}
+	{"doctype": "Waste Reason"}
 ]

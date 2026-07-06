@@ -1,10 +1,9 @@
 # Copyright (c) 2026, Your Company
 # License: MIT
-"""Stock Ledger Entry is a simple, append-only audit trail of every raw
-material stock movement (consumption from a Juice Order, or a reversal
-when that order is cancelled). Entries are written by
-raw_material.adjust_stock() and are not meant to be created or edited by
-hand."""
+"""Stock Ledger Entry is an append-only audit trail of every raw material
+stock movement. Entries are created automatically when a Juice Order,
+Waste Entry, or Stock Adjustment is submitted or cancelled — they are
+not meant to be created or edited manually."""
 
 from frappe.model.document import Document
 

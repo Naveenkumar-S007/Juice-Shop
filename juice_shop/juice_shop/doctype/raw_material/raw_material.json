@@ -7,9 +7,9 @@
  "engine": "InnoDB",
  "field_order": [
   "material_name",
-  "uom",
+  "unit_of_measure",
   "column_break_1",
-  "opening_stock",
+  "cost_per_unit",
   "current_stock",
   "reorder_level",
   "is_active"
@@ -24,11 +24,11 @@
    "unique": 1
   },
   {
-   "fieldname": "uom",
+   "fieldname": "unit_of_measure",
    "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "UOM",
-   "options": "Kg\nGram\nLitre\nMillilitre\nUnit",
+   "label": "Unit of Measure",
+   "options": "grams\nml\npieces\nkg\nlitre",
    "reqd": 1
   },
   {
@@ -36,13 +36,14 @@
    "fieldtype": "Column Break"
   },
   {
-   "description": "Stock quantity when this material was first added",
-   "fieldname": "opening_stock",
-   "fieldtype": "Float",
-   "label": "Opening Stock"
+   "fieldname": "cost_per_unit",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Cost per Unit",
+   "description": "Cost of one unit of this raw material, in the unit of measure"
   },
   {
-   "description": "Auto-updated whenever a Juice Order or Stock Entry is submitted/cancelled. Do not edit directly.",
+   "description": "Auto-updated whenever a Juice Order, Waste Entry, or Stock Adjustment is submitted/cancelled. Do not edit directly.",
    "fieldname": "current_stock",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -50,7 +51,7 @@
    "read_only": 1
   },
   {
-   "description": "Get a low-stock indicator once Current Stock falls below this",
+   "description": "Get a low-stock alert once Current Stock falls below this level",
    "fieldname": "reorder_level",
    "fieldtype": "Float",
    "label": "Reorder Level"
