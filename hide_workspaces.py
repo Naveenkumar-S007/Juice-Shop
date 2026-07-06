@@ -7,11 +7,11 @@ WORKSPACES_TO_HIDE = [
     "Buying",
     "Selling",
     "Purchase",
+    "Sales",
 ]
 
 WORKSPACES_KEEP_VISIBLE = [
     "Inventory",
-    "Sales",
     "Juice Shop",
 ]
 
