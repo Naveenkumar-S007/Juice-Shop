@@ -14,10 +14,11 @@ traceability, no warehouse/BOM logic — just day-to-day sales tracking.
    Preparing / Served / Cancelled).
 3. **Daily Juice Sales** report — pick a date range and see total orders,
    quantity sold, and revenue, broken down by juice item.
-4. **Waste Entry** doctype — log spoiled/wasted juice (spillage, expired
-   fruit, unsold stock, etc.) with quantity and reason, per **Waste Entry
-   Item** row. Waste value is calculated automatically from each item's
-   cost price.
+4. **Waste Entry** doctype — log spoiled/wasted **raw materials**
+   directly (e.g. spoiled oranges, spilled sugar, melted ice) before
+   they are ever used in a juice, per **Waste Entry Item** row. Waste
+   value is calculated automatically from each raw material's cost per
+   unit.
 5. **Waste Reason** doctype — a simple, editable list of waste reasons
    (e.g. "Spoilage", "Spillage", "Unsold at close").
 6. **Daily Waste Summary** report — pick a date range and see wasted
@@ -98,8 +99,9 @@ bench restart
    make one serving.
 3. When a customer orders, create a **Juice Order**, add the juice(s),
    and submit. Raw material stock is deducted automatically.
-4. When juice is spoiled or unsold, create a **Waste Entry** and submit.
-   Raw material stock is deducted automatically.
+4. When raw materials are spoiled or spilled (before they become juice),
+   create a **Waste Entry** selecting the wasted raw material directly and
+   submit. Raw material stock is deducted automatically.
 5. When new stock arrives, create a **Stock Adjustment**, add the
    materials and quantities, and submit to increase stock.
 6. Use the **Raw Material Stock Report** to see what needs reordering, or
